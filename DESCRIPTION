@@ -1,0 +1,13 @@
+Package: ebola.forecast.wa.sl
+Title: Code accompanying the manuscript "Assessing the performance of real-time epidemic forecasts: A case study of the 2013-16 Ebola epidemic" (doi:10.1101/177451).
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Sebastian",
+           family = "Funk",
+           role = c("aut", "cre"),
+           email = "sebastian.funk@lshtm.ac.uk")
+Description: Contains all the code and data required to generate the figures and tables in the manusciprt
+License: MIT + file LICENSE
+ByteCompile: true
+Encoding: UTF-8
+LazyData: true
