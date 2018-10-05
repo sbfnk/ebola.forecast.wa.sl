@@ -104,7 +104,6 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
 
     for (loop_week in min_week:max(df_data$week)) {
         message("Week ", loop_week)
-        gc() ## save memory
         cases <- df_data %>%
             dplyr::filter(week <= loop_week) %>%
             dplyr::select(time=day, value=incidence)
@@ -135,5 +134,6 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
                                 ) %>%
                          rename(day=time) %>%
                          inner_join(df_data %>% dplyr::select(day, date))))
+        if (!bi$error_flag) gc() ## save memory
     }
 }
