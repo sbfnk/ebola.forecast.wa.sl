@@ -1,4 +1,4 @@
-##' Creates Bayesian time-series regression null model forecasts for "Assessing the performance of real-time epidemic forecasts: A case study of the 2013-16 Ebola epidemic."  (doi: 10.1101/177451).
+##' Creates deterministic null model forecasts for "Assessing the performance of real-time epidemic forecasts: A case study of the 2013-16 Ebola epidemic."  (doi: 10.1101/177451).
 ##'
 ##' Forecasts are generated for Western Area, Sierra Leone
 ##' @param start_forecast_date The date at which to start forecasts.
@@ -112,21 +112,18 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
         bi <- libbi(bim, with=("transform-initial-to-param"),
                     obs=list(Inc=cases),
                     end_time=max(cases$time),
-                    noutputs=max(cases$time)/7,
                     thin=100) %>%
             sample(nsamples=10000, proposal="prior") %>%
             adapt_proposal(min=0.1, max=0.5, adapt="both") %>%
-            sample(nsamples=100000, with=c("transform-obs-to-state"))
+            sample(nsamples=100000)
 
         ## forecast
         pred <- predict(bi,
-                        start_time=max(cases$time),
                         end_time=max(cases$time)+forecast_horizon*7,
-                        noutputs=forecast_horizon)
-        fit <- bi_read(bi, type=c("obs"))$Inc
+                        output_every=7,
+                        with=c("transform-obs-to-state"))
         forecast <- bi_read(pred, type=c("obs"))$Inc
-        df <- c(df, list(fit %>%
-                         bind_rows(forecast %>% dplyr::filter(time != min(time))) %>%
+        df <- c(df, list(forecast %>%
                          mutate(last_obs=df_data %>%
                                     dplyr::filter(week==loop_week) %>%
                                     .$date %>%
@@ -136,4 +133,12 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
                          inner_join(df_data %>% dplyr::select(day, date))))
         if (!bi$error_flag) gc() ## save memory
     }
+
+    df <- df %>%
+        bind_rows %>%
+        tbl_df %>%
+        select(last_obs, date, sample_id=np, cases=value) %>%
+        mutate(model="Deterministic")
+
+    return(df)
 }

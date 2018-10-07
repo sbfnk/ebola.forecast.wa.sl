@@ -46,5 +46,4 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
         mutate(value=if_else(value < 0, 0L, value),
                model="Autoregressive")
     return(df)
-
 }
