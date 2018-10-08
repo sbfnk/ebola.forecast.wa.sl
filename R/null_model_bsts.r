@@ -43,7 +43,8 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
     df <- lapply(df, bind_rows)
     df <- bind_rows(df)
     df <- df %>%
-        mutate(value=if_else(value < 0, 0L, value),
+        select(last_obs, date, sample_id, cases=value) %>%
+        mutate(cases=if_else(cases < 0, 0L, cases),
                model="Autoregressive")
     return(df)
 }

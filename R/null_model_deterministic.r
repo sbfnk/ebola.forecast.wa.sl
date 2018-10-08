@@ -137,7 +137,8 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
     df <- df %>%
         bind_rows %>%
         tbl_df %>%
-        select(last_obs, date, sample_id=np, cases=value) %>%
+        mutate(sample_id=as.integer(np), cases=as.integer(value)) %>%
+        select(last_obs, date, sample_id, cases) %>%
         mutate(model="Deterministic")
 
     return(df)
