@@ -6,7 +6,6 @@
 ##' @return A data frame containing MCMC samples from the predictive probability distribution at each time point.
 ##' @import rbi
 ##' @import rbi.helpers
-##' @import dplyr
 ##' @import stringi
 ##' @author Sebastian Funk
 null_model_unfocused <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
