@@ -4,10 +4,11 @@
 ##' @param start_forecast_date The date at which to start forecasts.
 ##' @param forecast_horizon The maximum number of weeks to forecast.
 ##' @return A data frame containing MCMC samples from the predictive probability distribution at each time point.
-##' @import rbi
-##' @import rbi.helpers
-##' @import stringi
-##' @author Sebastian Funk
+##' @importFrom rbi bi_model predict libbi sample bi_read
+##' @importFrom rbi.helpers adapt_proposal adapt_particles
+##' @importFrom dplyr %>% filter select bind_rows tbl_df mutate inner_join
+##' @importFrom stringi stri_split_lines
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 null_model_unfocused <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
 {
 

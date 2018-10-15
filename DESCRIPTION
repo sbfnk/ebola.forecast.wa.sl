@@ -17,8 +17,10 @@ Imports:
   cowplot,
   rbi,
   rbi.helpers,
-  magrittr,
-  stringi
+  goftest,
+  stringi,
+  xtable,
+  scoringRules
 License: MIT + file LICENSE
 ByteCompile: true
 Encoding: UTF-8

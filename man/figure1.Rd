@@ -16,5 +16,5 @@ plot
 Plots figure 1
 }
 \author{
-Sebastian Funk
+Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }

@@ -1,17 +1,20 @@
 ##' Plots figure 2
 ##'
+##' @param conf.levels Confidence levels to show
 ##' @return plot
-##' @importFrom dplyr %>% mutate if_else filter
+##' @importFrom dplyr %>% mutate if_else filter group_by rename
 ##' @importFrom cowplot plot_grid
 ##' @import ggplot2
 ##' @author Sebastian Funk
-figure2 <- function()
+figure2 <- function(conf.levels=c(0, 0.5, 0.9))
 {
+    quantiles <- c((1-conf.levels)/2,(1+conf.levels)/2) %>% unique %>% sort
     integer_breaks <- function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1))))
 
     ## calibration
     ff_calib <- samples_semi_mechanistic %>%
-        incidence_forecast_calibration %>%
+        select(-R0) %>%
+        assess_incidence_forecast(calibration) %>%
         mutate(best_model=if_else(stochasticity == "deterministic" &
                                   start_n_week_before == 0 &
                                   weeks_averaged == 1 &
@@ -21,8 +24,10 @@ figure2 <- function()
                            transmission_rate, sep="_"),
                model=factor(model))
 
-    best_forecast_1step <- ff_conf %>%
-        filter(variable=="cases") %>%
+    best_forecast_1step <- samples_semi_mechanistic %>%
+        select(-R0) %>%
+        rename(value=cases) %>%
+        calculate_quantiles(quantiles) %>%
         mutate(horizon=as.integer((date-last_obs)/7),
                type=if_else(horizon < 1, "fit", "forecast")) %>%
         filter(stochasticity == "deterministic" &
@@ -54,7 +59,10 @@ figure2 <- function()
         geom_ribbon(aes(ymin=`5%`, ymax=`95%`), alpha=0.25) +
         geom_line(aes(y=`50%`)) +
         geom_point(aes(y=`50%`)) +
-        geom_line(data=ebola_wa %>% mutate(type="data"), aes(y=incidence), lwd=1.5) +
+        geom_line(data=ebola_wa %>%
+                      mutate(type="data") %>%
+                      filter(date %in% best_forecast_1step$date),
+                  aes(y=incidence), lwd=1.5) +
         scale_y_continuous("Weekly incidence") +
         scale_x_date("", date_breaks="2 months",
                      date_labels="%b %Y",

@@ -1,35 +1,13 @@
-##' .. content for \description{} (no empty lines) ..
+##' Performs an Anderson-Darling test for uniformity for a randomised PIT histogram using predictive Monte-Carlo samples
 ##'
-##' .. content for \details{} ..
-##' @title 
-##' @param x 
-##' @importFrom dplyr group_by summarise %>% select
-##' @importFrom tidyr spread
-##' @return 
-##' @author Sebastian Funk
-df_to_vecmat <- function(x) {
-    list(y=x %>%
-             group_by(last_obs) %>%
-             summarise(incidence=unique(incidence)) %>%
-             .$incidence,
-         dat = x %>%
-             select(-incidence) %>%
-             spread(sample_id, value) %>%
-             select(-last_obs) %>%
-             as.matrix)
-}
-
-##' .. content for \description{} (no empty lines) ..
-##'
-##' .. content for \details{} ..
-##' @title 
-##' @param y 
-##' @param dat 
-##' @param J 
-##' @param N 
+##' See Eqs. 1 and 2 in Czado, Geniting and Held (2009), Predictive Model Assessment for Count Data, Biometrics Vol. 65, No. 4 (Dec., 2009), pp. 1254-1261
+##' @param y vector of data (length n)
+##' @param dat Nxn matrix of predictive samples, N being the number of Monte Carlo samples
+##' @param J the number of bins in the PIT histogram. If not given, will use the square root of n
+##' @param N the number of tests to perform, each time re-randomising the PIT
 ##' @importFrom goftest ad.test
-##' @return 
-##' @author Sebastian Funk
+##' @return the n p-values from the tests
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 pit_test_sample <- function(y, dat, J, N=10) {
     if (missing(J)) J <- as.integer(round(sqrt(length(y))))
     f <- lapply(seq_along(y), function(i) ecdf(dat[i, ]))
@@ -40,33 +18,112 @@ pit_test_sample <- function(y, dat, J, N=10) {
     return(pvalues)
 }
 
-calibration <- function (x) {
-    args <- df_to_vecmat(x)
-    pvalues <- do.call(pit_test_sample, args)
-    c(mean=mean(pvalues), sd=sd(pvalues))
+##' Determines sharpness of an incidence forecast with an Anderson-Darling test of the randomised PIT histogram.
+##'
+##' @inheritParams pit_test_sample
+##' @return data frame with mean and standard deviation of the resulting p values
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @seealso pit_test_sample
+calibration <- function (y, dat) {
+    pvalues <- pit_test_sample(y, dat)
+    return(data.frame(mean=mean(pvalues), sd=sd(pvalues)))
 }
 
-##' Determines calibration of incidence forecasts for the 2014--15 Ebola epidemic in Western Area in Sierra Leone
+##' Determines sharpness of an incidence forecast as the width of the prediction interval
 ##'
-##' @param x a forecast data frame with columns 'date', 'last_obs', 'incidence', 'R0', 'cases' and 'sample_id'
-##' @importFrom dplyr filter left_join group_by_at vars select mutate
+##' @return data frame with sharpness for each interval by date
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @param interval prediction interval(s) to use
+sharpness <- function (y, dat, interval) {
+    res <- list()
+    for (int in interval) {
+        width <- apply(dat, 1, function(x) {diff(quantile(x, 0.5 + c(-int, int)/2))})
+        res <-
+            c(res,
+              list(data.frame(date=as.Date(names(width)), interval=int, width=width)))
+    }
+    res <- bind_rows(res)
+    return(res)
+}
+
+##' Determines bias of an incidence forecast from predictive Monte-Carlo samples as the proportion of predictive samples greater than the data
+##'
+##' @return data frame with bias by date
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+bias <- function (y, dat) {
+    greater <- vapply(seq_along(y), function(x) {
+        sum(dat[x, ] > y[x])
+    }, .0)
+    equal <- vapply(seq_along(y), function(x) {
+        sum(dat[x, ] == y[x])
+    }, .0)
+    n <- dim(dat)[2]
+    res <- data.frame(date=as.Date(rownames(dat)),
+                      bias=2 * (greater/n - 0.5 * (1-equal/n)))
+    return(res)
+}
+
+##' Determines calibration of an incidence forecast with an Anderson-Darling test of the randomised PIT histogram.
+##'
+##' @param x a data frame with 'date', 'last_obs', (observed) 'incidence',  (predicted) 'cases'and 'sample_id' columns
+##' @param func function for forecast assessment
+##' @return mean and standard deviation of the resulting p values
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @seealso calibration sharpness bias
+apply_forecast_metric <- function (x, func, ...) {
+    y <- x %>%
+        group_by(last_obs) %>%
+        summarise(incidence=unique(incidence)) %>%
+        .$incidence
+    dat <- x %>%
+        select(-incidence, -date) %>%
+        spread(sample_id, cases) %>%
+        select(-last_obs) %>%
+        as.matrix
+    colnames(dat) <- as.character(unique(x$sample_id))
+    rownames(dat) <- as.character(unique(x$date))
+    return(func(y, dat, ...))
+}
+
+##' Assesses incidence forecasts for the 2014--15 Ebola epidemic in Western Area in Sierra Leone from Monte-Carlo samples
+##'
+##' @param x a forecast data frame with columns 'date', 'last_obs', 'incidence', 'cases' and 'sample_id', and possibly more columns (which will be grouped by)
+##' @inheritParams apply_forecast_metric
+##' @importFrom dplyr %>% filter left_join group_by_at vars select mutate
 ##' @importFrom tidyr gather nest unnest spread
 ##' @importFrom tibble enframe
 ##' @importFrom purrr map
 ##' @return data frame with (random) PIT p-values
-##' @author Sebastian Funk
-incidence_forecast_calibration <- function(x) {
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+assess_incidence_forecast <- function(x, func, ...) {
     return(x %>%
            filter(date > last_obs) %>%
-           left_join(ebola_wa) %>%
+           left_join(ebola_wa, by="date") %>%
            filter(!is.na(incidence)) %>%
-           gather(variable, value, R0, cases) %>%
-           filter(variable=="cases") %>%
            mutate(horizon=as.integer((date-last_obs)/7)) %>%
-           select(-date, -variable) %>%
-           group_by_at(vars(-value, -last_obs, -sample_id, -incidence)) %>%
+           group_by_at(vars(-cases, -date, -last_obs, -sample_id, -incidence)) %>%
            nest %>%
-           mutate(calibration=map(data, calibration)) %>%
-           unnest(map(calibration, enframe)) %>%
-           spread(name, value))
+           mutate(score=map(data, apply_forecast_metric, func, ...)) %>%
+           unnest(score))
 }
+
+##' Calculate quantiles for a data frame
+##'
+##' am x a data frame with a 'value' and a 'sample_id' column
+##' @param quantiles the quantiles to compute
+##' @return data frame with quantiles
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @importFrom dplyr %>% select group_by_at summarise
+##' @importFrom tidyr unnest spread
+##' @importFrom tibble enframe
+##' @importFrom purrr map
+calculate_quantiles <- function(x, quantiles)
+{
+    return (x %>%
+            select(-sample_id) %>%
+            group_by_at(vars(-value)) %>%
+            summarise(quantiles=list(quantile(value, quantiles))) %>%
+            unnest(map(quantiles, enframe)) %>%
+            spread(name, value))
+}
+

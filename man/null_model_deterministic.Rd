@@ -19,5 +19,5 @@ A data frame containing MCMC samples from the predictive probability distributio
 Forecasts are generated for Western Area, Sierra Leone
 }
 \author{
-Sebastian Funk
+Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }

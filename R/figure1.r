@@ -9,7 +9,7 @@
 ##' @importFrom dplyr filter
 ##' @importFrom cowplot plot_grid
 ##' @import ggplot2
-##' @author Sebastian Funk
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 figure1 <- function(conf.levels=c(0, 0.5, 0.9))
 {
     quantiles <- c((1-conf.levels)/2,(1+conf.levels)/2) %>% unique %>% sort
@@ -18,11 +18,7 @@ figure1 <- function(conf.levels=c(0, 0.5, 0.9))
     ff_conf <- samples_semi_mechanistic %>%
         gather(variable, value, R0, cases) %>%
         mutate(variable=factor(variable)) %>%
-        select(-sample_id) %>%
-        group_by_at(vars(-value)) %>%
-        summarise(quantiles=list(quantile(value, quantiles))) %>%
-        unnest(map(quantiles, enframe)) %>%
-        spread(name, value)
+        calculate_quantiles(quantiles)
 
     ff_conf_fit <- ff_conf %>%
         ungroup %>%

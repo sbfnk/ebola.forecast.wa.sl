@@ -4,11 +4,11 @@
 ##' @param start_forecast_date The date at which to start forecasts.
 ##' @param forecast_horizon The maximum number of weeks to forecast.
 ##' @return A data frame containing MCMC samples from the predictive probability distribution at each time point.
-##' @import rbi
-##' @import rbi.helpers
-##' @import dplyr
-##' @import stringi
-##' @author Sebastian Funk
+##' @importFrom rbi bi_model predict libbi sample bi_read
+##' @importFrom rbi.helpers adapt_proposal
+##' @importFrom dplyr %>% filter select bind_rows tbl_df mutate
+##' @importFrom stringi stri_split_lines
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
 {
 
@@ -98,16 +98,16 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
                week = day %/% 7L)
 
     min_week <- df_data %>%
-        dplyr::filter(date >= start_forecast_date) %>%
+        filter(date >= start_forecast_date) %>%
         .$week %>%
         min
 
     for (loop_week in min_week:max(df_data$week)) {
         message("Week ", loop_week)
         cases <- df_data %>%
-            dplyr::filter(week <= loop_week) %>%
-            dplyr::select(time=day, value=incidence)
-        bim <- bi_model(lines = stringi::stri_split_lines(model_str)[[1]])
+            filter(week <= loop_week) %>%
+            select(time=day, value=incidence)
+        bim <- bi_model(lines = stri_split_lines(model_str)[[1]])
         ## fit
         bi <- libbi(bim, with=("transform-initial-to-param"),
                     obs=list(Inc=cases),

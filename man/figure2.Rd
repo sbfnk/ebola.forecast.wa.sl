@@ -4,7 +4,10 @@
 \alias{figure2}
 \title{Plots figure 2}
 \usage{
-figure2()
+figure2(conf.levels = c(0, 0.5, 0.9))
+}
+\arguments{
+\item{conf.levels}{Confidence levels to show}
 }
 \value{
 plot

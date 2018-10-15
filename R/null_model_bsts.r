@@ -5,6 +5,11 @@
 ##' @param forecast_horizon The maximum number of weeks to forecast.
 ##' @return A data frame containing MCMC samples from the predictive probability distribution at each time point.
 ##' @author Sebastian Funk
+##' @importFrom dplyr %>% filter select bind_rows tbl_df mutate
+##' @importFrom tidyr gather
+##' @importFrom stringi stri_extract
+##' @importFrom bsts bsts predict.bsts AddLocalLinearTrend
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
 {
 
@@ -18,8 +23,8 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
     {
         forecast_date <- forecast_dates[id]
         y <- ebola_wa %>%
-            dplyr::filter(date<=forecast_date) %>%
-            .$value
+            filter(date<=forecast_date) %>%
+            .$incidence
 
         ss <- AddLocalLinearTrend(list(), y)
         bsts.model <- bsts(y, ss, niter=6000, ping=0)
@@ -32,12 +37,15 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
         df[[as.character(forecast_date)]] <- dist %>%
             tbl_df %>%
             mutate(sample_id=(1:n())-1L) %>%
+            filter(sample_id %% 5 == 0) %>%
+            mutate(sample_id=sample_id %/% 5L) %>%
             gather(horizon_week, value, -sample_id) %>%
             mutate(value=as.integer(round(value))) %>%
-            mutate(forecast_week=as.integer(str_extract(horizon_week, "[0-9]+")),
+            mutate(forecast_week=as.integer(stri_extract(horizon_week, regex="[0-9]+")),
                    last_obs=as.Date(forecast_date),
                    date=last_obs+7*forecast_week) %>%
-            dplyr::select(sample_id, date, last_obs, value)
+            filter(date <= max(ebola_wa$date)) %>%
+            select(sample_id, date, last_obs, value)
     }
 
     df <- lapply(df, bind_rows)

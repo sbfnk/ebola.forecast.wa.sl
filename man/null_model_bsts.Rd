@@ -20,4 +20,6 @@ Forecasts are generated for Western Area, Sierra Leone
 }
 \author{
 Sebastian Funk
+
+Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 }
