@@ -4,6 +4,7 @@
 ##' @return plot
 ##' @importFrom dplyr %>% filter bind_rows mutate select_if
 ##' @importFrom scoringRules crps_sample
+##' @importFrom cowplot get_legend plot_grid
 ##' @import ggplot2
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 figure3 <- function(max_horizon=5)
@@ -45,7 +46,8 @@ figure3 <- function(max_horizon=5)
         scale_color_brewer(palette="Set1") +
         geom_hline(yintercept=0.1, linetype="dashed") +
         geom_hline(yintercept=0.01, linetype="dotted") +
-        ylab("Calibration") + xlab("Horizon")
+        ylab("Calibration") + xlab("Horizon") +
+        theme(legend.position="top")
 
     p_sharpness <- ggplot(df_sharpness, aes(x=horizon, color=model)) +
         geom_line(aes(y=`0.5`), linetype="solid") +
@@ -80,5 +82,6 @@ figure3 <- function(max_horizon=5)
                       nrow = 2, labels = c("A", "B", "C", "D"))
     legend <- get_legend(p_calib)
     p <- plot_grid(legend, pcol, rel_heights = c(.15, 1), ncol=1)
+    return(p)
 }
 
