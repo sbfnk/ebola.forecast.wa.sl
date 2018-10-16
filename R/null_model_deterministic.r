@@ -118,7 +118,7 @@ null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), 
             sample(nsamples=100000)
 
         ## forecast
-        pred <- predict(bi,
+        pred <- predict(bi, input=bi,
                         end_time=max(cases$time)+forecast_horizon*7,
                         output_every=7,
                         with=c("transform-obs-to-state"))
