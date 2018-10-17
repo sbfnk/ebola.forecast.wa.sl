@@ -24,8 +24,9 @@ pit_test_sample <- function(y, dat, J, N=10) {
 ##' @return data frame with mean and standard deviation of the resulting p values
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 ##' @seealso pit_test_sample
-calibration <- function (y, dat) {
-    pvalues <- pit_test_sample(y, dat)
+##' @param ... other arguments for \code{\link{pit_test_sample}}
+calibration <- function (y, dat, ...) {
+    pvalues <- pit_test_sample(y, dat, ...)
     return(data.frame(mean=mean(pvalues), sd=sd(pvalues)))
 }
 
