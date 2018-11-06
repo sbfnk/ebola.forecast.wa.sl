@@ -3,6 +3,7 @@
 ##' @param max_horizon maximal forecast horizon
 ##' @return plot
 ##' @importFrom dplyr %>% filter bind_rows mutate select_if
+##' @importFrom tidyr spread
 ##' @importFrom scoringRules crps_sample dss_sample logs_sample
 ##' @importFrom cowplot get_legend plot_grid
 ##' @import ggplot2
@@ -38,10 +39,10 @@ figure3 <- function(max_horizon=5)
         group_by(model, horizon) %>%
         summarise(bias=mean(bias))
 
-    df_crps <- df %>%
+    df_rps <- df %>%
         assess_incidence_forecast(crps_sample) %>%
         group_by(model, horizon) %>%
-        summarise(crps=mean(score))
+        summarise(rps=mean(score))
 
     df_dss <- df %>%
         assess_incidence_forecast(dss_sample) %>%
@@ -79,7 +80,7 @@ figure3 <- function(max_horizon=5)
         ylab("Bias") + xlab("Horizon (weeks)") +
         geom_hline(yintercept=0, linetype="dashed")
 
-    p_crps <- ggplot(df_crps, aes(x=horizon, y=crps, color=model)) +
+    p_rps <- ggplot(df_rps, aes(x=horizon, y=rps, color=model)) +
         geom_line() +
         geom_point() +
         scale_color_brewer(palette="Set1") +
@@ -105,7 +106,7 @@ figure3 <- function(max_horizon=5)
                       scale_x_continuous(""),
                       p_bias + theme(legend.position = "none") +
                       scale_x_continuous(""),
-                      p_crps + theme(legend.position = "none") +
+                      p_rps + theme(legend.position = "none") +
                       scale_x_continuous(""),
                       p_dss + theme(legend.position = "none"),
                       p_logs + theme(legend.position = "none") +
@@ -115,4 +116,3 @@ figure3 <- function(max_horizon=5)
     p <- plot_grid(legend, pcol, rel_heights = c(.15, 1), ncol=1)
     return(p)
 }
-
