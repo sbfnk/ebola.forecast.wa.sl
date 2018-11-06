@@ -52,15 +52,11 @@ sharpness <- function (y, dat, interval) {
 ##' @return data frame with bias by date
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 bias <- function (y, dat) {
-    greater <- vapply(seq_along(y), function(x) {
-        sum(dat[x, ] > y[x])
-    }, .0)
-    equal <- vapply(seq_along(y), function(x) {
-        sum(dat[x, ] == y[x])
-    }, .0)
-    n <- dim(dat)[2]
+    f <- lapply(seq_along(y), function(i) ecdf(dat[i, ]))
+    P_x <- vapply(seq_along(y), function(i) f[[i]](y[i]), .0)
+    P_xm1 <- vapply(seq_along(y), function(i) f[[i]](y[i]-1), .0)
     res <- data.frame(date=as.Date(rownames(dat)),
-                      bias=2 * (greater/n - 0.5 * (1-equal/n)))
+                      bias=1-(P_x+P_xm1))
     return(res)
 }
 
