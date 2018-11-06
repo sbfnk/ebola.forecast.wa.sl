@@ -6,7 +6,7 @@
 ##' @importFrom tidyr gather unnest spread
 ##' @importFrom purrr map
 ##' @importFrom tibble enframe
-##' @importFrom dplyr filter
+##' @importFrom dplyr filter ungroup
 ##' @importFrom cowplot plot_grid
 ##' @import ggplot2
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
