@@ -4,12 +4,14 @@
 \alias{calibration}
 \title{Determines sharpness of an incidence forecast with an Anderson-Darling test of the randomised PIT histogram.}
 \usage{
-calibration(y, dat)
+calibration(y, dat, ...)
 }
 \arguments{
 \item{y}{vector of data (length n)}
 
 \item{dat}{Nxn matrix of predictive samples, N being the number of Monte Carlo samples}
+
+\item{...}{other arguments for \code{\link{pit_test_sample}}}
 }
 \value{
 data frame with mean and standard deviation of the resulting p values
