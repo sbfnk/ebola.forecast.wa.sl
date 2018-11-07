@@ -27,7 +27,7 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
             .$incidence
 
         ss <- AddLocalLinearTrend(list(), y)
-        bsts.model <- bsts(y, ss, niter=6000, ping=0, family="poisson")
+        bsts.model <- bsts(y, ss, niter=6000, ping=0)
 
         p <- predict.bsts(bsts.model, horizon=forecast_horizon, burn=1000)
 
@@ -40,7 +40,6 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
             mutate(sample_id=sample_id %/% 5L) %>%
             gather(horizon_week, value, -sample_id) %>%
             mutate(value=as.integer(round(value))) %>%
-            filter(!is.na(value)) %>%
             mutate(forecast_week=as.integer(stri_extract(horizon_week, regex="[0-9]+")),
                    last_obs=as.Date(forecast_date),
                    date=last_obs+7*forecast_week) %>%
