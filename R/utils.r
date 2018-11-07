@@ -68,6 +68,7 @@ bias <- function (y, dat) {
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 ##' @seealso calibration sharpness bias
 apply_forecast_metric <- function (x, func, ...) {
+    ## remove any NAs
     y <- x %>%
         group_by(last_obs) %>%
         summarise(incidence=unique(incidence)) %>%
