@@ -68,7 +68,8 @@ figure4 <- function(max_horizon=2)
         geom_line() +
         geom_hline(yintercept=0.1, linetype="dashed") +
         geom_hline(yintercept=0.01, linetype="dotted") +
-        scale_x_date("", date_breaks="2 months", date_labels="%b %Y") +
+        scale_x_date("", date_breaks="2 months", date_labels="%b %Y",
+                     limits=range(ebola_wa$date)) +
         scale_y_continuous("Calibration", limits=c(0, 1)) +
         theme(legend.position="none") +
         scale_color_brewer("", palette="Set1") +
@@ -79,7 +80,8 @@ figure4 <- function(max_horizon=2)
         geom_line() +
         geom_hline(yintercept=0.1, linetype="dashed") +
         geom_hline(yintercept=0.01, linetype="dotted") +
-        scale_x_date("", date_breaks="2 months", date_labels="%b %Y") +
+        scale_x_date("", date_breaks="2 months", date_labels="%b %Y",
+                     limits=range(ebola_wa$date)) +
         scale_y_continuous("Calibration", limits=c(0, 1)) +
         theme(legend.position="top") +
         scale_color_brewer("", palette="Set1") +
