@@ -26,7 +26,7 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
             filter(date<=forecast_date) %>%
             .$incidence
 
-        ss <- AddLocalLinearTrend(list(), y)
+        ss <- AddSemilocalLinearTrend(y=y)
         bsts.model <- bsts(y, ss, niter=6000, ping=0)
 
         p <- predict.bsts(bsts.model, horizon=forecast_horizon, burn=1000)
