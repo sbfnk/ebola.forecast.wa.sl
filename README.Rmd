@@ -56,8 +56,10 @@ samples_unfocused <- null_model_unfocused()
 The table and figures in the manuscript can be re-created using
 
 ```{r eval=FALSE}
-t <- table1()
-print(t)
+t1 <- table1()
+print(t1)
+t2 <- table2()
+print(t2)
 
 library('cowplot')
 p1 <- figure1()
