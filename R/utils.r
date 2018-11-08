@@ -38,7 +38,7 @@ calibration <- function (y, dat, ...) {
 sharpness <- function (y, dat, interval) {
     res <- list()
     for (int in interval) {
-        width <- apply(dat, 1, function(x) {diff(quantile(x, 0.5 + c(-int, int)/2))})
+        width <- apply(dat, 1, function(x) mad(x)/0.675)
         res <-
             c(res,
               list(data.frame(date=as.Date(names(width)), interval=int, width=width)))
