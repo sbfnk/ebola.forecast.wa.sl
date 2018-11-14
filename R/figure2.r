@@ -14,7 +14,7 @@ figure2 <- function(conf.levels=c(0, 0.5, 0.9))
     ## calibration
     ff_calib <- samples_semi_mechanistic %>%
         select(-R0) %>%
-        assess_incidence_forecast(calibration) %>%
+        assess_incidence_forecast(calibration_sample) %>%
         mutate(best_model=if_else(stochasticity == "deterministic" &
                                   start_n_week_before == 0 &
                                   weeks_averaged == 1 &
@@ -23,6 +23,20 @@ figure2 <- function(conf.levels=c(0, 0.5, 0.9))
                model=paste(stochasticity, start_n_week_before, weeks_averaged,
                            transmission_rate, sep="_"),
                model=factor(model))
+
+    ff_sharpness <- samples_semi_mechanistic %>%
+        select(-R0) %>%
+        assess_incidence_forecast(sharpness_sample) %>%
+        mutate(best_model=if_else(stochasticity == "deterministic" &
+                                  start_n_week_before == 0 &
+                                  weeks_averaged == 1 &
+                                  transmission_rate == "fixed", "yes", "no")) %>%
+        mutate(best_model=factor(best_model, levels=c("yes", "no")),
+               model=paste(stochasticity, start_n_week_before, weeks_averaged,
+                           transmission_rate, sep="_"),
+               model=factor(model)) %>%
+        group_by(best_model, model, horizon) %>%
+        summarise(mean=mean(sharpness))
 
     best_forecast_1step <- samples_semi_mechanistic %>%
         select(-R0) %>%

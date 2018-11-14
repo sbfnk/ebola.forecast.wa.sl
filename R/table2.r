@@ -35,9 +35,7 @@ table2 <- function(max_horizon=3)
                Sharpness=signif(Sharpness, 2),
                RPS=signif(RPS, 2),
                DSS=signif(DSS, 2),
-               logS=signif(logS, 2)) %>%
-        mutate(logS=as.character(logS),
-               logS=if_else(logS=="Inf", "$\\infty$", logS)) %>%
+               AE=signif(AE, 2)) %>%
         select(-horizon) %>%
         kable("latex", align=c("l", "r", "r", "r", "r", "r", "r", "r"),
               format.args=list(drop0trailing=TRUE), booktabs=TRUE, escape=FALSE) %>%

@@ -25,7 +25,7 @@ pit_test_sample <- function(y, dat, J, N=10) {
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 ##' @seealso pit_test_sample
 ##' @param ... other arguments for \code{\link{pit_test_sample}}
-calibration <- function (y, dat, ...) {
+calibration_sample <- function (y, dat, ...) {
     pvalues <- pit_test_sample(y, dat, ...)
     return(data.frame(mean=mean(pvalues), sd=sd(pvalues)))
 }
@@ -35,28 +35,33 @@ calibration <- function (y, dat, ...) {
 ##' @return data frame with sharpness for each interval by date
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 ##' @param interval prediction interval(s) to use
-sharpness <- function (y, dat, interval) {
-    res <- list()
-    for (int in interval) {
-        width <- apply(dat, 1, function(x) mad(x)/0.675)
-        res <-
-            c(res,
-              list(data.frame(date=as.Date(names(width)), interval=int, width=width)))
-    }
-    res <- bind_rows(res)
-    return(res)
+sharpness_sample <- function (y, dat) {
+    sharpness <- apply(dat, 1, function(x) mad(x)/0.675)
+    return(data.frame(date=as.Date(rownames(dat)), sharpness=sharpness))
 }
 
 ##' Determines bias of an incidence forecast from predictive Monte-Carlo samples as the proportion of predictive samples greater than the data
 ##'
 ##' @return data frame with bias by date
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
-bias <- function (y, dat) {
+bias_sample <- function (y, dat) {
     f <- lapply(seq_along(y), function(i) ecdf(dat[i, ]))
     P_x <- vapply(seq_along(y), function(i) f[[i]](y[i]), .0)
     P_xm1 <- vapply(seq_along(y), function(i) f[[i]](y[i]-1), .0)
     res <- data.frame(date=as.Date(rownames(dat)),
                       bias=1-(P_x+P_xm1))
+    return(res)
+}
+
+##' Determines the mean absolute error of an incidence forecast from predictive
+##' Monte-Carlo samples as difference between the mean and the data
+##'
+##' @return data frame with mae by date
+##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+ae_sample <- function (y, dat) {
+    ae <- vapply(seq_along(y), function(i) {abs(median(dat[i, ])-y[i])}, .0)
+    res <- data.frame(date=as.Date(rownames(dat)),
+                      ae=ae)
     return(res)
 }
 

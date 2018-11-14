@@ -16,7 +16,7 @@ assess_all_forecasts <- function (max_horizon) {
                                             setdiff(model, "Semi-mechanistic"))))
 
     if (!missing(max_horizon)) {
-        df <- df %>% 
+        df <- df %>%
             filter((date - last_obs)/7 <= max_horizon)
     }
 
@@ -26,33 +26,32 @@ assess_all_forecasts <- function (max_horizon) {
     ret <- list()
 
     ret[["Calibration"]] <- df %>%
-        assess_incidence_forecast(calibration)
-
-    ret[["Sharpness"]] <- df %>%
-        assess_incidence_forecast(sharpness, interval=0.5) %>%
-        spread(interval, width) %>%
-        group_by(model, horizon) %>%
-        summarise(mean=mean(`0.5`))
+        assess_incidence_forecast(calibration_sample)
 
     ret[["Bias"]] <- df %>%
-        assess_incidence_forecast(bias) %>%
+        assess_incidence_forecast(bias_sample) %>%
         group_by(model, horizon) %>%
-        summarise(mean=mean(bias))
+        summarise(mean=mean(bias), sd=sd(bias))
+
+    ret[["Sharpness"]] <- df %>%
+        assess_incidence_forecast(sharpness_sample) %>%
+        group_by(model, horizon) %>%
+        summarise(mean=mean(sharpness), sd=sd(sharpness))
 
     ret[["RPS"]] <- df %>%
         assess_incidence_forecast(crps_sample) %>%
         group_by(model, horizon) %>%
-        summarise(mean=mean(score))
+        summarise(mean=mean(score), sd=sd(score))
 
     ret[["DSS"]] <- df %>%
         assess_incidence_forecast(dss_sample) %>%
         group_by(model, horizon) %>%
-        summarise(mean=mean(score))
+        summarise(mean=mean(score), sd=sd(score))
 
-    ret[["logS"]] <- df %>%
-        assess_incidence_forecast(logs_sample) %>%
+    ret[["AE"]] <- df %>%
+        assess_incidence_forecast(ae_sample) %>%
         group_by(model, horizon) %>%
-        summarise(mean=mean(score))
+        summarise(mean=mean(ae), sd=sd(ae))
 
     return(ret)
 }

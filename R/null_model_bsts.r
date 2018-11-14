@@ -8,7 +8,7 @@
 ##' @importFrom dplyr %>% filter select bind_rows tbl_df mutate
 ##' @importFrom tidyr gather
 ##' @importFrom stringi stri_extract
-##' @importFrom bsts bsts predict.bsts AddLocalLinearTrend
+##' @importFrom bsts bsts predict.bsts AddAr
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
 {
@@ -26,7 +26,7 @@ null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_
             filter(date<=forecast_date) %>%
             .$incidence
 
-        ss <- AddSemilocalLinearTrend(y=y)
+        ss <- AddAr(y=y)
         bsts.model <- bsts(y, ss, niter=6000, ping=0)
 
         p <- predict.bsts(bsts.model, horizon=forecast_horizon, burn=1000)

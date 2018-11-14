@@ -42,13 +42,17 @@ figure1 <- function(conf.levels=c(0, 0.5, 0.9))
     p_fit_plot[["cases"]] <-
         p_fit_plot[["cases"]] +
         ylab("Weekly incidence") +
-        geom_point(data=ebola_wa, aes(y=incidence), colour="black")
+        geom_point(data=ebola_wa, aes(y=incidence), colour="black") +
+        geom_vline(data=data.frame(x=as.Date("2014-08-24")), aes(xintercept=x),
+                   linetype="dotted")
 
     p_fit_plot[["R0"]] <-
         p_fit_plot[["R0"]] +
         ylab(expression(R[0])) +
         geom_hline(yintercept=1, linetype="dashed") +
-        coord_cartesian(ylim=c(0, 6))
+        coord_cartesian(ylim=c(0, 6)) +
+        geom_vline(data=data.frame(x=as.Date("2014-08-24")), aes(xintercept=x),
+                   linetype="dotted")
 
     p <- plot_grid(p_fit_plot[["cases"]], p_fit_plot[["R0"]], labels=c("A", "B"), nrow=1)
     return(p)
