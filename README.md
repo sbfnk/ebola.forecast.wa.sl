@@ -13,11 +13,8 @@ This repository contains the data and code for our preprint:
 
 ### How to download or install
 
-You can download the compendium as a zip from from this URL:
-</archive/master.zip>
-
-Or you can install this compendium as an R package,
-ebola.forecast.wa.sl, from GitHub with:
+You can install the code and data as an R package,
+`ebola.forecast.wa.sl`, from GitHub with:
 
 ``` r
 devtools::install_github("sbfnk/ebola.forecast.wa.sl")
@@ -56,9 +53,18 @@ samples_unfocused <- null_model_unfocused()
 The table and figures in the manuscript can be re-created using
 
 ``` r
-table1()
-figure1()
-figure2()
-figure3()
-figure4()
+t1 <- table1()
+print(t1)
+t2 <- table2()
+print(t2)
+
+library('cowplot')
+p1 <- figure1()
+save_plot("figure1.pdf", p1, base_aspect_ratio=3, base_height = 2.5)
+p2 <- figure2()
+save_plot("figure2.pdf", p2, base_aspect_ratio=3, base_height = 3)
+p3 <- figure3()
+save_plot("figure3.pdf", p3, base_width = 9, base_height=4.5)
+p4 <- figure4()
+save_plot("figure4.pdf", p4, base_aspect_ratio=1.71)
 ```

@@ -21,9 +21,7 @@ This repository contains the data and code for our preprint:
 
 ### How to download or install
 
-You can download the compendium as a zip from from this URL: </archive/master.zip>
-
-Or you can install this compendium as an R package, ebola.forecast.wa.sl, from GitHub with:
+You can install the code and data as an R package, `ebola.forecast.wa.sl`, from GitHub with:
 
 ```{r eval=FALSE}
 devtools::install_github("sbfnk/ebola.forecast.wa.sl")
