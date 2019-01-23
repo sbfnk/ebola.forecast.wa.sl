@@ -12,11 +12,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Assessing the performance of real-time epidemic forecasts: A case study of the 2013--16 Ebola epidemic
+# Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15
 
 This repository contains the data and code for our preprint:
 
-> Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo and W. John Edmunds. Assessing the performance of real-time epidemic forecasts: A case study of the 2013-16 Ebola epidemic. bioRxiv 177451. Online at <https://doi.org/10.1101/177451 >.
+> Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo and W. John Edmunds. Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15. bioRxiv 177451. Online at <https://doi.org/10.1101/177451 >.
 
 
 ### How to download or install
