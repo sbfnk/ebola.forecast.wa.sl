@@ -26,7 +26,7 @@ figure4 <- function(max_horizon=2)
     for (last_obs_loop in as.character(unique(df_sm$last_obs))) {
         evol_sm_calib[[last_obs_loop]] <- df_sm %>%
             filter(last_obs <= as.Date(last_obs_loop)) %>%
-            assess_incidence_forecast(calibration) %>%
+            assess_incidence_forecast(calibration_sample) %>%
             mutate(up_to=as.Date(last_obs_loop))
     }
 
@@ -52,7 +52,7 @@ figure4 <- function(max_horizon=2)
     for (last_obs_loop in as.character(unique(df_sm$last_obs))) {
         evol_calib[[last_obs_loop]] <- df %>%
             filter(last_obs <= as.Date(last_obs_loop)) %>%
-            assess_incidence_forecast(calibration) %>%
+            assess_incidence_forecast(calibration_sample) %>%
             mutate(up_to=as.Date(last_obs_loop))
     }
 
