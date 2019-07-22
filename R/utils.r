@@ -36,7 +36,7 @@ calibration_sample <- function (y, dat, ...) {
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 ##' @param interval prediction interval(s) to use
 sharpness_sample <- function (y, dat) {
-    sharpness <- apply(dat, 1, function(x) mad(x)/0.675)
+    sharpness <- apply(dat, 1, mad)
     return(data.frame(date=as.Date(rownames(dat)), sharpness=sharpness))
 }
 
