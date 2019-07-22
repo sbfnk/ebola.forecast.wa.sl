@@ -1,15 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Assessing the performance of real-time epidemic forecasts: A case study of the 2013–16 Ebola epidemic
+# Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15
 
-This repository contains the data and code for our preprint:
+This repository contains the data and code for our paper:
 
 > Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
 > Rosalind M. Eggo and W. John Edmunds. Assessing the performance of
-> real-time epidemic forecasts: A case study of the 2013-16 Ebola
-> epidemic. bioRxiv 177451. Online at \<<https://doi.org/10.1101/177451>
-> \>.
+> real-time epidemic forecasts: A case study of Ebola in the Western
+> Area region of Sierra Leone, 2014-15. PLoS Comput Biol 15(2):
+> e1006785. <https://doi.org/10.1371/journal.pcbi.1006785>
 
 ### How to download or install
 
@@ -60,11 +60,11 @@ print(t2)
 
 library('cowplot')
 p1 <- figure1()
-save_plot("figure1.pdf", p1, base_aspect_ratio=3, base_height = 2.5)
 p2 <- figure2()
-save_plot("figure2.pdf", p2, base_aspect_ratio=3, base_height = 3)
 p3 <- figure3()
-save_plot("figure3.pdf", p3, base_width = 9, base_height=4.5)
 p4 <- figure4()
-save_plot("figure4.pdf", p4, base_aspect_ratio=1.71)
+ggsave("figure1.pdf", p1, width=18, height=6.6, dpi=300, units="cm")
+ggsave("figure2.pdf", p2, width=18, height=6.6, dpi=300, units="cm")
+ggsave("figure3.pdf", p3, width=18, height=11.1, dpi=300, units="cm")
+ggsave("figure4.pdf", p4, width=15.9, height=11.1, dpi=300, units="cm")
 ```

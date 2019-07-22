@@ -3,3 +3,5 @@
 ^README-.*\.png$
 ^CONDUCT\.md$
 ^CONTRIBUTING\.md$
+^packrat/
+^\.Rprofile$
