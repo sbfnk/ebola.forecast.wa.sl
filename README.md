@@ -6,8 +6,8 @@
 This repository contains the data and code for our paper:
 
 > Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
-> Rosalind M. Eggo and W. John Edmunds. Assessing the performance of
-> real-time epidemic forecasts: A case study of Ebola in the Western
+> Rosalind M. Eggo and W. John Edmunds (2019). Assessing the performance
+> of real-time epidemic forecasts: A case study of Ebola in the Western
 > Area region of Sierra Leone, 2014-15. PLoS Comput Biol 15(2):
 > e1006785. <https://doi.org/10.1371/journal.pcbi.1006785>
 
