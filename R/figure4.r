@@ -7,6 +7,7 @@
 ##' @importFrom cowplot get_legend plot_grid
 ##' @import ggplot2
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 figure4 <- function(max_horizon=2)
 {
     df_sm <- samples_semi_mechanistic %>%

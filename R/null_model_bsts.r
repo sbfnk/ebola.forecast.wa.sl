@@ -10,6 +10,7 @@
 ##' @importFrom stringi stri_extract
 ##' @importFrom bsts bsts predict.bsts AddAr
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 null_model_bsts <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
 {
 

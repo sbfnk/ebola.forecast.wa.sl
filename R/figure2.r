@@ -6,6 +6,7 @@
 ##' @importFrom cowplot plot_grid
 ##' @import ggplot2
 ##' @author Sebastian Funk
+##' @export
 figure2 <- function(conf.levels=c(0, 0.5, 0.9))
 {
     quantiles <- c((1-conf.levels)/2,(1+conf.levels)/2) %>% unique %>% sort
