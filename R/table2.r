@@ -25,6 +25,7 @@ table2 <- function(max_horizon=3)
     df_metrics %>%
         rename(Model=model) %>%
         mutate(score=factor(score, levels=unique(score))) %>%
+        select(-sd) %>%
         spread(score, mean) %>%
         arrange(horizon, Model) %>%
         mutate(Calibration=if_else(Calibration<0.01, 0, Calibration),
