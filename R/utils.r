@@ -8,6 +8,7 @@
 ##' @importFrom goftest ad.test
 ##' @return the n p-values from the tests
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 pit_test_sample <- function(y, dat, J, N=10) {
     if (missing(J)) J <- as.integer(round(sqrt(length(y))))
     f <- lapply(seq_along(y), function(i) ecdf(dat[i, ]))

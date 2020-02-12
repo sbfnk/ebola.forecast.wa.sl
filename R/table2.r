@@ -6,6 +6,7 @@
 ##' @importFrom kableExtra kable group_rows
 ##' @inheritParams assess_all_forecasts
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 table2 <- function(max_horizon=3)
 {
     scores <- assess_all_forecasts(max_horizon=max_horizon)

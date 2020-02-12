@@ -5,6 +5,7 @@
 ##' @importFrom tidyr spread
 ##' @importFrom kableExtra kable add_header_above
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 table1 <- function()
 {
     ## calibration

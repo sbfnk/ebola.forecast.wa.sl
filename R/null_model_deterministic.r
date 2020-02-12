@@ -9,6 +9,7 @@
 ##' @importFrom dplyr %>% filter select bind_rows tbl_df mutate inner_join
 ##' @importFrom stringi stri_split_lines
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 null_model_deterministic <- function(start_forecast_date=as.Date("2014-08-24"), forecast_horizon = 10)
 {
 

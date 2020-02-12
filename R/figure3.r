@@ -9,6 +9,7 @@
 ##' @import ggplot2
 ##' @inheritParams assess_all_forecasts
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
+##' @export
 figure3 <- function(max_horizon=5)
 {
     scores <- assess_all_forecasts(max_horizon=max_horizon)
