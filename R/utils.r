@@ -108,7 +108,8 @@ assess_incidence_forecast <- function(x, func, ...) {
            group_by_at(vars(-cases, -date, -last_obs, -sample_id, -incidence)) %>%
            nest %>%
            mutate(score=map(data, apply_forecast_metric, func, ...)) %>%
-           unnest(score))
+           unnest(score) %>%
+           ungroup())
 }
 
 ##' Calculate quantiles for a data frame
@@ -128,6 +129,7 @@ calculate_quantiles <- function(x, quantiles)
             group_by_at(vars(-value)) %>%
             summarise(quantiles=list(quantile(value, quantiles))) %>%
             unnest(map(quantiles, enframe)) %>%
-            spread(name, value))
+            spread(name, value) %>%
+            ungroup())
 }
 
