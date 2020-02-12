@@ -1,6 +1,5 @@
 ##' Plots figure 3
 ##'
-##' @param max_horizon maximal forecast horizon
 ##' @return plot
 ##' @importFrom dplyr %>% filter bind_rows mutate select_if
 ##' @importFrom tidyr spread
