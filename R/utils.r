@@ -127,8 +127,8 @@ calculate_quantiles <- function(x, quantiles)
     return (x %>%
             select(-sample_id) %>%
             group_by_at(vars(-value)) %>%
-            summarise(quantiles=list(quantile(value, quantiles))) %>%
-            unnest(map(quantiles, enframe)) %>%
+            summarise(quantiles=list(enframe(quantile(value, quantiles)))) %>%
+            unnest(quantiles) %>%
             spread(name, value) %>%
             ungroup())
 }
