@@ -3,6 +3,8 @@
 ##' @return list of data frames with the forecast scores, by model and horizon
 ##' @author Sebastian Funk \email{sebastian.funk@lshtm.ac.uk}
 ##' @param max_horizon maximum forecast horizon (in weeks)
+##' @export
+
 assess_all_forecasts <- function (max_horizon) {
     df <- samples_semi_mechanistic %>%
         filter(stochasticity == "deterministic" &
