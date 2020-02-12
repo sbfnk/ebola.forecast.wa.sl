@@ -2,7 +2,7 @@
 ##'
 ##' See Eqs. 1 and 2 in Czado, Geniting and Held (2009), Predictive Model Assessment for Count Data, Biometrics Vol. 65, No. 4 (Dec., 2009), pp. 1254-1261
 ##' @param y vector of data (length n)
-##' @param dat Nxn matrix of predictive samples, N being the number of Monte Carlo samples
+##' @param dat nxN matrix of predictive samples, n (number of rows) being the number of data points and N (number of columns) the number of Monte Carlo samples
 ##' @param J the number of bins in the PIT histogram. If not given, will use the square root of n
 ##' @param N the number of tests to perform, each time re-randomising the PIT
 ##' @importFrom goftest ad.test
