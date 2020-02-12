@@ -9,7 +9,7 @@ pit_test_sample(y, dat, J, N = 10)
 \arguments{
 \item{y}{vector of data (length n)}
 
-\item{dat}{Nxn matrix of predictive samples, N being the number of Monte Carlo samples}
+\item{dat}{nxN matrix of predictive samples, n (number of rows) being the number of data points and N (number of columns) the number of Monte Carlo samples}
 
 \item{J}{the number of bins in the PIT histogram. If not given, will use the square root of n}
 

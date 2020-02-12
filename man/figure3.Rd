@@ -7,7 +7,7 @@
 figure3(max_horizon = 5)
 }
 \arguments{
-\item{max_horizon}{maximal forecast horizon}
+\item{max_horizon}{maximum forecast horizon (in weeks)}
 }
 \value{
 plot

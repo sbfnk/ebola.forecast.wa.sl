@@ -4,8 +4,10 @@
 \alias{null_model_deterministic}
 \title{Creates deterministic null model forecasts for "Assessing the performance of real-time epidemic forecasts: A case study of the 2013-16 Ebola epidemic."  (doi: 10.1101/177451).}
 \usage{
-null_model_deterministic(start_forecast_date = as.Date("2014-08-24"),
-  forecast_horizon = 10)
+null_model_deterministic(
+  start_forecast_date = as.Date("2014-08-24"),
+  forecast_horizon = 10
+)
 }
 \arguments{
 \item{start_forecast_date}{The date at which to start forecasts.}
