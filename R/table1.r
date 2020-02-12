@@ -11,7 +11,7 @@ table1 <- function()
     ## calibration
     samples_semi_mechanistic %>%
         select(-R0) %>%
-        assess_incidence_forecast(calibration) %>%
+        assess_incidence_forecast(calibration_sample) %>%
         select(-data, -model) %>%
         filter(horizon<5) %>%
         mutate(p_score=if_else(mean<0.01, 0, mean),
