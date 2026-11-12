@@ -3,6 +3,8 @@
 
 # Assessing the performance of real-time epidemic forecasts: A case study of Ebola in the Western Area region of Sierra Leone, 2014-15
 
+> **Archived.** No longer maintained; last updated February 2020.
+
 This repository contains the data and code for our paper:
 
 > Sebastian Funk, Anton Camacho, Adam J. Kucharski, Rachel Lowe,
